@@ -10,7 +10,7 @@ class ProductForm(ModelForm):
 
     def clean(self):
         categories = self.cleaned_data.get('categories')
-        if categories and categories.count() > 4:
-            raise ValidationError('Maximum three categories are allowed.')
+        if categories and categories.count() > 6:
+            raise ValidationError('Maximum six categories are allowed.')
 
         return self.cleaned_data

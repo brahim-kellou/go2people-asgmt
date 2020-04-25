@@ -6,10 +6,12 @@
     {% for product in products %}
     <div class="col mb-4">
         <div class="card">
-            <img src="{{ product.image.url }}" class="card-img-top" alt="#">
+            <a href="/products/{{product.id}}">
+                <img src="{{ product.image.url }}" class="card-img-top" alt="#">
+            </a>
             <div class="card-body">
                 <div class="supplier-info">
-                    <div class="supplier-image" style="background-image: url('/media/products/product-02.jpeg');">
+                    <div class="supplier-image" style="background-image:url({{product.supplier.thumbnail.url}});">
                     </div>
                     <span class="supplier-name">{{product.supplier.user.username}}</span>
                 </div>
@@ -21,7 +23,7 @@
                     {% endfor %}
                 </div>
                 <div>
-                    <span>Schooltype: {{product.schoo_type}}</span>
+                    <span>Schooltype: {{product.get_school_type_disp}}</span>
                 </div>
             </div>
         </div>
