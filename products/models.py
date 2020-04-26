@@ -6,6 +6,7 @@ from accounts.models import Supplier
 class Category(models.Model):
     name = models.CharField(unique=True, max_length=200)
     slug = models.SlugField(blank=True)
+    description = models.TextField(blank=True)
 
     class Meta:
         verbose_name_plural = "categories"

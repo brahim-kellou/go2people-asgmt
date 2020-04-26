@@ -1,33 +1,46 @@
 {% extends 'products/layout.html' %}
 
 {% block content %}
-<h3>{{title}}</h3>
-<div class="row row-cols-1 row-cols-md-3">
+<div class="container">
+  <h3 class="mt-3 mb-3">{{title}}</h3>
+  <div class="row row-cols-1 row-cols-md-3">
     {% for product in products %}
     <div class="col mb-4">
-        <div class="card">
-            <a href="/products/{{product.id}}">
-                <img src="{{ product.image.url }}" class="card-img-top" alt="#">
-            </a>
-            <div class="card-body">
-                <div class="supplier-info">
-                    <div class="supplier-image" style="background-image:url({{product.supplier.thumbnail.url}});">
-                    </div>
-                    <span class="supplier-name">{{product.supplier.user.username}}</span>
-                </div>
-                <p class="card-text">{{product.description}}</p>
-                <div class="dropdown-divider"></div>
-                <div>
-                    {% for category in product.category.all %}
-                    <span class="badge badge-pill badge-secondary">{{category}}</span>
-                    {% endfor %}
-                </div>
-                <div>
-                    <span>Schooltype: {{product.get_school_type_disp}}</span>
-                </div>
+      <div class="card">
+        <a href="/products/{{product.id}}">
+          <img src="{{ product.image.url }}" class="card-img-top" alt="#">
+        </a>
+        <div class="card-body">
+          <div class="d-flex justify-content-between mb-2">
+            <div class="d-flex">
+              <div class="supplier-image" style="background-image:url({{product.supplier.thumbnail.url}});"></div>
+              <div class="ml-3">
+                <h6 class="m-0">{{product.name}}</h6>
+                <span class="m-0 text-secondary">{{product.supplier.user.username}}</span>
+              </div>
             </div>
+            <span>{{currency}} {{product.price}}</span>
+          </div>
+          <p class="card-text mb-2">{{product.description|truncatewords:25}}</p>
+          <div class="mb-2">
+            <h6 class="m-0">{{categories}}</h6>
+            {% for category in product.categories.all %}
+            <span class="badge badge-pill badge-secondary pt-1 pb-1">{{category}}</span>
+            {% endfor %}
+          </div>
+          <div class="mb-2">
+            <h6 class="m-0">{{school_type}}</h6>
+            <span>{{product.get_school_type_display}}</span>
+          </div>
+          <div class="dropdown-divider"></div>
+          <div>
+            <p class="card-text mb-0"><small class="text-muted">{{published_at}}: {{product.created_at}}</small></p>
+            <p class="card-text"><small class="text-muted">{{end_at}}: {{product.end_at}}</small></p>
+          </div>
         </div>
+      </div>
     </div>
     {% endfor %}
+  </div>
 </div>
 {% endblock %}

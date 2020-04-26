@@ -7,19 +7,19 @@
     height: 100%;;
     object-fit: cover;
 }
-.supplier-info {
-    display: flex;
-    align-items: center;
-    margin-bottom: 12px;
-}
 .supplier-image {
-    height: 32px;
-    width: 32px;
-    border-radius: 16px;
+    background-position: center;
+    height: 36px;
+    width: 36px;
+    border-radius: 18px;
     background-size: cover;
     display: block;
 }
-.supplier-name {
-    font-size: 16px;
-    margin-left: 12px;
+.supplier-image-lg {
+    background-position: center;
+    height: 56px;
+    width: 56px;
+    border-radius: 28px;
+    background-size: cover;
+    display: block;
 }
