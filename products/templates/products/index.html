@@ -7,7 +7,7 @@
     {% for product in products %}
     <div class="col mb-4">
       <div class="card">
-        <a href="/products/{{product.id}}">
+        <a href="/products/{{product.slug}}">
           <img src="{{ product.image.url }}" class="card-img-top" alt="#">
         </a>
         <div class="card-body">
@@ -34,7 +34,6 @@
           </div>
           <div class="dropdown-divider"></div>
           <div>
-            <p class="card-text mb-0"><small class="text-muted">{{published_at}}: {{product.created_at}}</small></p>
             <p class="card-text"><small class="text-muted">{{end_at}}: {{product.end_at}}</small></p>
           </div>
         </div>

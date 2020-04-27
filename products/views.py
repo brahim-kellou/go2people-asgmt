@@ -21,8 +21,10 @@ def indexView(request):
     return render(request, 'products/index.html', context)
 
 
-def productView(request, product_id):
-    product = get_object_or_404(Product, pk=product_id)
+def productView(request, product_slug):
+    query = Product.objects.filter(slug=product_slug)
+    # product = get_object_or_404(Product, pk=product_id)
+    product = get_object_or_404(query)
     context = {
         'title': 'Product Details',
         'currency': '€',
