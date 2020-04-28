@@ -1,9 +1,13 @@
 A platform where suppliers can offer products (or services) to schools in craftsmanship built with Django
 
-Initial Setup
-Make new virtualenv: virtualenv env
-Activate the virtualenv: source env/bin/activate
-Install Django pip install Django
-Run the server python mange.py runserver
-Open website http://localhost:8000/products/ or http://127.0.0.1:8000/products/
+## Initial Setup
+1. Make new virtual environment 
+2. Activate the virtual environment
+3. Install the packages from requirements.txt `pip install requirements.txt`
+4. Run the server `python mange.py runserver`
+5. Open website http://localhost:8000/products/ or http://127.0.0.1:8000/products/
+
+
+
+
 
