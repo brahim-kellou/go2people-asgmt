@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
 from .models import Product
@@ -10,6 +10,7 @@ def indexView(request):
     now = datetime.now()
     products = Product.objects.filter(end_at__gt=now, created_at__lt=now)
     context = {
+        'page_title': 'List products',
         'title': 'List products',
         'currency': '€',
         'categories': 'Categories',
@@ -26,6 +27,7 @@ def productView(request, product_slug):
     # product = get_object_or_404(Product, pk=product_id)
     product = get_object_or_404(query)
     context = {
+        'page_title': product.name,
         'title': 'Product Details',
         'currency': '€',
         'categories': 'Categories',

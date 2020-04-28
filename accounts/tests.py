@@ -2,20 +2,35 @@ from django.test import TestCase
 from django.contrib.auth.models import User
 from .models import Supplier
 from django.core.files.uploadedfile import SimpleUploadedFile
+from go2people.utils import random_string_generator
 
 
-def create_supplier(username):
-    password = "JAwqpyuW3M7dqScr"
-    thumbnail = SimpleUploadedFile(name='supplier_image_test.jpg', content=open(
-        'media/profile_images/tests/supplier_image_test.jpg', 'rb').read(), content_type='image/jpeg')
-    user = User.objects.create(username=username, password=password)
+def create_supplier(**kwargs):
+    user_dict = {
+        'username': random_string_generator(10),
+        'password': random_string_generator(20),
+    }
 
-    return Supplier.objects.create(user=user, thumbnail=thumbnail)
+    if 'username' in kwargs:
+        user_dict['username'] = kwargs.get('username')
+    if 'password' in kwargs:
+        user_dict['password'] = kwargs.get('password')
+
+    user = User.objects.create(**user_dict)
+
+    supplier_dict = {
+        'user': user,
+        'thumbnail': SimpleUploadedFile(name='supplier_image_test.jpg', content=open(
+            'media/profile_images/tests/supplier_image_test.jpg', 'rb').read(), content_type='image/jpeg')
+    }
+
+    return Supplier.objects.create(**supplier_dict)
 
 
 class SupplierModelTest(TestCase):
 
     def test_creation_supplier(self):
-        supplier = create_supplier("user01")
+        username = "delta"
+        supplier = create_supplier(username=username)
         self.assertTrue(isinstance(supplier, Supplier))
-        self.assertEqual(supplier.__str__(), supplier.user.username)
+        self.assertEqual(supplier.__str__(), username)

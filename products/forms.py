@@ -1,7 +1,6 @@
 from django.core.exceptions import ValidationError
 from django.forms import ModelForm
 from .models import Product
-from django.utils import timezone
 
 
 class CategoryForm(ModelForm):
@@ -67,7 +66,7 @@ class ProductForm(ModelForm):
 
         if created_at and end_at and created_at >= end_at:
             error_date = {
-                'end_at': 'Publishing end date must be after Creation date.'}
+                'end_at': 'Publishing end date cannot be before the date of creation.'}
             error_exist = True
             error_list.append(error_date)
 

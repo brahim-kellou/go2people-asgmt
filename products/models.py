@@ -1,4 +1,5 @@
 from django.db import models
+from datetime import datetime
 from django.utils import timezone
 from accounts.models import Supplier
 from go2people.utils import unique_slug_generator
@@ -44,11 +45,16 @@ class Product(models.Model):
     )
 
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    created_at = models.DateTimeField(default=timezone.now)
-    end_at = models.DateTimeField()
+    created_at = models.DateTimeField('Date published', default=datetime.now)
+    end_at = models.DateTimeField('Publishing end date')
 
     def __str__(self):
         return self.name
+
+    def is_product_available(self):
+        now = datetime.now()
+        return self.created_at <= now <= self.end_at
+    is_product_available.boolean = True
 
 
 def slug_generator(sender, instance, *args, **kwargs):
