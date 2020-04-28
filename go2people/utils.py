@@ -14,7 +14,7 @@ def unique_slug_generator(instance, new_slug=None):
         slug = slugify(instance.name)
 
     InstanceClass = instance.__class__
-    qs = InstanceClass.objects.filter(slug=slug)
+    qs = InstanceClass.objects.filter(slug=slug).exclude(id=instance.id)
     exists = qs.exists()
     if exists:
         new_slug = "{slug}-{randstr}".format(

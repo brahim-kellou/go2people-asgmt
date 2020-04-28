@@ -1,6 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.forms import ModelForm
 from .models import Product
+from django.utils import timezone
 
 
 class CategoryForm(ModelForm):
@@ -15,11 +16,12 @@ class CategoryForm(ModelForm):
         error_exist = False
 
         if slug:
-            qs = self._meta.model._default_manager.filter(**{'slug': slug})
             initial_value = self.initial.get('slug')
+            qs = self._meta.model._default_manager.filter(**{'slug': slug})
             qs = qs.exclude(**{'slug': initial_value})
             if qs.exists():
-                error_slug = 'A Category with this slug already exists.'
+                error_slug = {
+                    'slug': 'A category with this slug already exists.'}
                 error_exist = True
                 error_list.append(error_slug)
 
@@ -43,27 +45,30 @@ class ProductForm(ModelForm):
         error_exist = False
 
         if slug:
-            qs = self._meta.model._default_manager.filter(**{'slug': slug})
             initial_value = self.initial.get('slug')
+            qs = self._meta.model._default_manager.filter(**{'slug': slug})
             qs = qs.exclude(**{'slug': initial_value})
             if qs.exists():
-                error_slug = 'A product with this slug already exists.'
+                error_slug = {
+                    'slug': 'A product with this slug already exists.'}
                 error_exist = True
                 error_list.append(error_slug)
 
         if categories and categories.count() > 6:
-            error_categories = 'One to six categories are allowed.'
+            error_categories = {
+                'categories': 'One to six categories are allowed.'}
             error_exist = True
             error_list.append(error_categories)
 
         if price and price < 0:
-            error_price = 'Price must be more than 0.'
+            error_price = {'price': 'Price must be more than 0.'}
             error_exist = True
             error_list.append(error_price)
 
         if created_at and end_at and created_at >= end_at:
+            error_date = {
+                'end_at': 'Publishing end date must be after Creation date.'}
             error_exist = True
-            error_date = 'Publishing end date must be after Creation date.'
             error_list.append(error_date)
 
         if error_exist:

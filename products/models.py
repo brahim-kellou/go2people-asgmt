@@ -1,5 +1,5 @@
 from django.db import models
-from datetime import datetime
+from django.utils import timezone
 from accounts.models import Supplier
 from go2people.utils import unique_slug_generator
 from django.db.models.signals import pre_save
@@ -44,7 +44,7 @@ class Product(models.Model):
     )
 
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    created_at = models.DateTimeField(default=datetime.now)
+    created_at = models.DateTimeField(default=timezone.now)
     end_at = models.DateTimeField()
 
     def __str__(self):
