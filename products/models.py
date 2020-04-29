@@ -21,7 +21,9 @@ class Category(models.Model):
     A class used to represent a Category
     '''
     name = models.CharField(max_length=200)
-    slug = models.SlugField(unique=True, blank=True, help_text=SLUG_HELP_TEXT)
+    slug = models.SlugField(unique=True,
+                            blank=True,
+                            help_text=SLUG_HELP_TEXT)
     description = models.TextField(blank=True)
 
     class Meta:
@@ -38,9 +40,12 @@ class Product(models.Model):
     '''
     A class used to represent a Product
     '''
-    supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE)
+    supplier = models.ForeignKey(Supplier,
+                                 on_delete=models.CASCADE)
     name = models.CharField(max_length=200)
-    slug = models.SlugField(unique=True, blank=True, help_text=SLUG_HELP_TEXT)
+    slug = models.SlugField(unique=True,
+                            blank=True,
+                            help_text=SLUG_HELP_TEXT)
     categories = models.ManyToManyField(Category)
     description = models.TextField()
     image = models.ImageField(upload_to='products')
@@ -63,7 +68,8 @@ class Product(models.Model):
     )
 
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    created_at = models.DateTimeField('Date published', default=datetime.now)
+    created_at = models.DateTimeField('Date published',
+                                      default=datetime.now)
     end_at = models.DateTimeField('Publishing end date')
 
     def __str__(self):
