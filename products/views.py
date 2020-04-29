@@ -1,12 +1,18 @@
-from django.shortcuts import render, redirect
-from django.http import HttpResponse
-from django.shortcuts import get_object_or_404, render
-from .models import Product
+'''
+This module contains views:
+- index_view: Returns the view of product list (index).
+- product_view: Returns the view of product details (product).
+'''
 from datetime import datetime
+from django.shortcuts import get_object_or_404, render
+
+from products.models import Product
 
 
-def indexView(request):
-    # products = Product.objects.all()
+def index_view(request):
+    '''
+    Returns the view of product list (index)
+    '''
     now = datetime.now()
     products = Product.objects.filter(end_at__gt=now, created_at__lt=now)
     context = {
@@ -15,16 +21,18 @@ def indexView(request):
         'currency': '€',
         'categories': 'Categories',
         'school_type': 'School Type',
-        'published_at': 'Published at',
-        'end_at': 'End at',
+        'published_at': 'Date published',
+        'end_at': 'Publishing end date',
         'products': products,
     }
     return render(request, 'products/index.html', context)
 
 
-def productView(request, product_slug):
+def product_view(request, product_slug):
+    '''
+    Returns the view of product details (product)
+    '''
     query = Product.objects.filter(slug=product_slug)
-    # product = get_object_or_404(Product, pk=product_id)
     product = get_object_or_404(query)
     context = {
         'page_title': product.name,
@@ -32,8 +40,8 @@ def productView(request, product_slug):
         'currency': '€',
         'categories': 'Categories',
         'school_type': 'School Type',
-        'published_at': 'Published at',
-        'end_at': 'End at',
+        'published_at': 'Date published',
+        'end_at': 'Publishing end date',
         'product': product,
     }
 

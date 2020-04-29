@@ -1,17 +1,33 @@
-from django.db import models
+'''
+This module contains models represented by two classes:
+- Categroy: a class used to represent a Category
+- Product: a class used to represent a Product
+'''
 from datetime import datetime
-from django.utils import timezone
+
+from django.db import models
+from django.db.models.signals import pre_save
+
 from accounts.models import Supplier
 from go2people.utils import unique_slug_generator
-from django.db.models.signals import pre_save
+
+
+SLUG_HELP_TEXT = "The slug must be unique, \
+it will be generated automatically if the field is blank."
 
 
 class Category(models.Model):
+    '''
+    A class used to represent a Category
+    '''
     name = models.CharField(max_length=200)
-    slug = models.SlugField(unique=True, blank=True)
+    slug = models.SlugField(unique=True, blank=True, help_text=SLUG_HELP_TEXT)
     description = models.TextField(blank=True)
 
     class Meta:
+        '''
+        This is a Meta class
+        '''
         verbose_name_plural = "categories"
 
     def __str__(self):
@@ -19,10 +35,12 @@ class Category(models.Model):
 
 
 class Product(models.Model):
+    '''
+    A class used to represent a Product
+    '''
     supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE)
     name = models.CharField(max_length=200)
-    slug = models.SlugField(
-        unique=True, blank=True, help_text="The slug must be unique, it will be generated automatically if the field is blank.")
+    slug = models.SlugField(unique=True, blank=True, help_text=SLUG_HELP_TEXT)
     categories = models.ManyToManyField(Category)
     description = models.TextField()
     image = models.ImageField(upload_to='products')
@@ -52,12 +70,16 @@ class Product(models.Model):
         return self.name
 
     def is_product_available(self):
+        ''' Check if the product is available, so it can be published
+        '''
         now = datetime.now()
         return self.created_at <= now <= self.end_at
     is_product_available.boolean = True
 
 
 def slug_generator(sender, instance, *args, **kwargs):
+    ''' Generate a unique slug for a given object
+    '''
     if not instance.slug:
         instance.slug = unique_slug_generator(instance)
 

@@ -1,10 +1,12 @@
+'''
+This module contains urlpatterns of products app.
+'''
 from django.urls import path
 
 from . import views
 
-app_name = 'products'
 
 urlpatterns = [
-    path('', views.indexView, name='index'),
-    path('<slug:product_slug>/', views.productView, name='product')
+    path('', views.index_view, name='index'),
+    path('<slug:product_slug>/', views.product_view, name='product')
 ]
