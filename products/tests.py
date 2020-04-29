@@ -5,7 +5,8 @@ This module contains tests represented by:
 - TestViews: a class to test views
 '''
 from datetime import datetime, timedelta
-from django.test import TestCase, Client
+import shutil
+from django.test import TestCase, Client, override_settings
 from django.urls import reverse, resolve
 from django.core.files.uploadedfile import SimpleUploadedFile
 
@@ -15,6 +16,7 @@ from products.views import index_view, product_view
 from accounts.tests import create_supplier
 from go2people.utils import random_string_generator
 
+TEST_DIR = 'test_data'
 
 def create_category(name):
     ''' Create a category with the given name
@@ -56,6 +58,7 @@ def create_product(**kwargs):
     return product
 
 
+@override_settings(MEDIA_ROOT=(TEST_DIR + '/media'))
 class TestModels(TestCase):
     '''
     A class to test models
@@ -77,6 +80,7 @@ class TestModels(TestCase):
         slug = "category-slug"
         self.assertEqual(category.slug, slug)
 
+
     def test_creation_product(self):
         """
         __str__() should return the same product name of creation
@@ -94,6 +98,7 @@ class TestModels(TestCase):
         slug = "product-slug"
         self.assertEqual(product.slug, slug)
 
+
     def test_product_is_available(self):
         """
         is_product_available() should return True for
@@ -104,6 +109,7 @@ class TestModels(TestCase):
         product = create_product(created_at=created_at, end_at=end_at)
         self.assertIs(product.is_product_available(), True)
 
+
     def test_product_is_not_available(self):
         """
         is_product_available() should return False for
@@ -113,6 +119,7 @@ class TestModels(TestCase):
         end_at = datetime.now() - timedelta(days=1)
         product = create_product(created_at=created_at, end_at=end_at)
         self.assertIs(product.is_product_available(), False)
+
 
     def test_product_created_in_future_is_not_available(self):
         """
@@ -125,6 +132,7 @@ class TestModels(TestCase):
         self.assertIs(product.is_product_available(), False)
 
 
+@override_settings(MEDIA_ROOT=(TEST_DIR + '/media'))
 class TestUrls(TestCase):
     '''
     A class to test urls
@@ -144,6 +152,7 @@ class TestUrls(TestCase):
         self.assertEqual(resolve(url).func, product_view)
 
 
+@override_settings(MEDIA_ROOT=(TEST_DIR + '/media'))
 class TestViews(TestCase):
     '''
     A class to test views
@@ -176,3 +185,11 @@ class TestViews(TestCase):
         """
         response = self.client.get(reverse('product', args=['product-20']))
         self.assertEqual(response.status_code, 404)
+
+
+def tearDownModule():
+    print("\nDeleting temporary files...\n")
+    try:
+        shutil.rmtree(TEST_DIR)
+    except OSError:
+        pass

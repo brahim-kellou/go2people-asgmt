@@ -2,13 +2,15 @@
 This module contains tests represented by:
 - TestModel: a class to test models
 '''
-from django.test import TestCase
+import shutil
+from django.test import TestCase, override_settings
 from django.contrib.auth.models import User
 from django.core.files.uploadedfile import SimpleUploadedFile
 
 from accounts.models import Supplier
 from go2people.utils import random_string_generator
 
+TEST_DIR = 'test_data'
 
 def create_supplier(**kwargs):
     '''
@@ -36,7 +38,7 @@ def create_supplier(**kwargs):
 
     return Supplier.objects.create(**supplier_dict)
 
-
+@override_settings(MEDIA_ROOT=(TEST_DIR + '/media'))
 class TestModel(TestCase):
     '''
     A class to test models
@@ -49,3 +51,11 @@ class TestModel(TestCase):
         supplier = create_supplier(username=username)
         self.assertTrue(isinstance(supplier, Supplier))
         self.assertEqual(supplier.__str__(), username)
+
+
+def tearDownModule():
+    print("\nDeleting temporary files...\n")
+    try:
+        shutil.rmtree(TEST_DIR)
+    except OSError:
+        pass
